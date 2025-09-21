@@ -1,188 +1,501 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jardín de Girasoles</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(to top, #1a1a2e, #16213e, #0f3460);
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      font-family: "Arial", sans-serif;
-      color: white;
-    }
-
-    .cont {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      flex-direction: column;
-      padding-bottom: 50px;
-    }
-
-    /* 🌟 FRASE */
-    .frase {
-      position: relative;
-      margin-bottom: 40px;
-      font-size: 2.5rem;
-      font-weight: bold;
-      text-align: center;
-      color: #ffd700;
-      text-shadow: 0 0 10px #ffdf00, 0 0 20px #ffdf00, 0 0 40px #ffbf00;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 3px solid #ffd700;
-      width: 0;
-      animation: escribir 4s steps(25) 1s forwards, brillo 3s infinite alternate ease-in-out;
-    }
-
-    @keyframes escribir {
-      from {
-        width: 0;
-      }
-      to {
-        width: 20ch; /* ajusta al número de caracteres */
-      }
-    }
-
-    @keyframes brillo {
-      0% {
-        text-shadow: 0 0 10px #ffdf00, 0 0 20px #ffdf00, 0 0 40px #ffbf00;
-        color: #ffd700;
-      }
-      50% {
-        text-shadow: 0 0 20px #fff76a, 0 0 40px #ffe135, 0 0 60px #ffbf00;
-        color: #fff76a;
-      }
-      100% {
-        text-shadow: 0 0 10px #ffdf00, 0 0 20px #ffdf00, 0 0 40px #ffbf00;
-        color: #ffd700;
-      }
-    }
-
-    /* ✨ Estrellas fugaces */
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 80px;
-      background: linear-gradient(white, transparent);
-      opacity: 0.8;
-      animation: shooting 3s linear infinite;
-    }
-
-    @keyframes shooting {
-      from {
-        transform: translate(0, 0);
-        opacity: 1;
-      }
-      to {
-        transform: translate(-300px, 300px);
-        opacity: 0;
-      }
-    }
-
-    /* 🌻 Girasoles */
-    .flowers {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 20px;
-    }
-
-    .flower {
-      position: relative;
-      width: 80px;
-      height: 150px;
-    }
-
-    .stem {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 8px;
-      height: 100px;
-      background: green;
-      transform: translateX(-50%);
-    }
-
-    .petal {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background: #ffd700;
-      border-radius: 50%;
-      top: 10px;
-      left: 50%;
-      transform-origin: bottom center;
-    }
-
-    .center {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background: brown;
-      border-radius: 50%;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jardín de Girasoles Nocturno</title>
+    <style>
+        /* Reset y variables CSS */
+        *, *::after, *::before {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-oscuro: #000;
+            --color-noche: #0a0a2a;
+            --color-petalo: linear-gradient(to top, #ff8c00, #ffd700, #ffff00);
+            --color-tallo: linear-gradient(to top, transparent 10%, #2d5016, #4a7c23, #6b8e23);
+            --velocidad-animacion: 0.8s;
+            --duracion-hoja: 2s;
+        }
+        
+        body {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: var(--color-oscuro);
+            overflow: hidden;
+            perspective: 1000px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Contenedor principal */
+        .contenedor {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Fondo estrellado */
+        .cierno-nocturno {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at center, rgba(10, 10, 42, 0.3) 0%, var(--color-noche) 70%),
+                radial-gradient(ellipse at bottom, var(--color-noche), rgba(145, 233, 255, 0.2)),
+                linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+            z-index: 1;
+        }
+        
+        .estrellas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+        
+        .estrella {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: titilar 4s infinite ease-in-out;
+        }
+        
+        /* Estrellas fugaces */
+        .estrellas-fugaces {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+        
+        .estrella-fugaz {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            animation: estrellaFugaz 3s linear infinite;
+        }
+        
+        .estrella-fugaz::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+            animation: colaEstrella 3s linear infinite;
+        }
+        
+        /* Girasoles */
+        .girasoles {
+            position: relative;
+            transform: scale(0.9);
+            z-index: 4;
+        }
+        
+        .girasol {
+            position: absolute;
+            bottom: 10vmin;
+            transform-origin: bottom center;
+            z-index: 50;
+        }
+        
+        .petalos {
+            position: relative;
+            animation: florecer 2s backwards;
+        }
+        
+        .petalo {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 23vmin;
+            height: 6vmin;
+            border-radius: 60% 40% 60% 40%;
+            background-image: var(--color-petalo);
+            transform-origin: bottom center;
+            opacity: 0.95;
+            box-shadow: inset 0 0 1vmin rgba(255, 255, 255, 0.7), 0 0 3vmin rgba(255, 215, 0, 0.4);
+            z-index: 2;
+        }
+        
+        .centro-girasol {
+            position: absolute;
+            left: -4vmin;
+            top: -4vmin;
+            width: 10vmin;
+            height: 10vmin;
+            border-radius: 50%;
+            background-color: #8b4513;
+            background-image: radial-gradient(circle at 30% 30%, #654321, #8b4513, #2f1b14);
+            box-shadow: inset 0 0 2vmin rgba(0, 0, 0, 0.8), 0 0 1vmin rgba(139, 69, 19, 0.6);
+            z-index: 3;
+        }
+        
+        .centro-girasol::after {
+            content: "";
+            position: absolute;
+            left: 46%;
+            top: 31%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            z-index: 4;
+            border-radius: inherit;
+            background-image: repeating-conic-gradient(
+                from 0deg, #2f1b14 0deg 15deg, #654321 15deg 30deg
+            );
+        }
+        
+        .semilla {
+            position: absolute;
+            width: 0.8vmin;
+            height: 0.8vmin;
+            background-color: #8b4513;
+            border-radius: 50%;
+            filter: blur(0.1vmin);
+            animation: semillas-girasol 6s linear infinite backwards;
+            box-shadow: 0 0 1vmin rgba(139, 69, 19, 0.8);
+        }
+        
+        .tallo {
+            height: 55vmin;
+            width: 2vmin;
+            background-image: linear-gradient(
+                to left, rgba(0, 0, 0, 0.3), transparent, rgba(255, 255, 255, 0.2)
+            ), var(--color-tallo);
+            box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.7);
+            animation: crecer-tallo 4s backwards;
+        }
+        
+        .hoja-tallo {
+            --ancho: 8vmin;
+            --alto: calc(var(--ancho) + 3vmin);
+            position: absolute;
+            top: 20%;
+            left: 90%;
+            width: var(--ancho);
+            height: var(--alto);
+            border-top-right-radius: var(--alto);
+            border-bottom-left-radius: var(--alto);
+            background-image: linear-gradient(
+                to top, rgba(45, 80, 22, 0.6), #4a7c23, #6b8e23
+            );
+            box-shadow: inset 0 0 1vmin rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Hierba */
+        .hierba {
+            --color: #4a7c23;
+            --grosor-linea: 2vmin;
+            position: absolute;
+            bottom: 12vmin;
+            left: -7vmin;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 20;
+            transform-origin: bottom center;
+            transform: rotate(-48deg) rotateY(40deg);
+        }
+        
+        /* Animaciones */
+        @keyframes titilar {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes estrellaFugaz {
+            0% {
+                opacity: 0;
+                transform: translateX(0) translateY(0) rotate(45deg);
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                opacity: 0;
+                transform: translateX(120vw) translateY(50vh) rotate(10deg);
+            }
+        }
+        
+        @keyframes colaEstrella {
+            0% { width: 0; }
+            30% { width: 100px; }
+            100% { width: 0; }
+        }
+        
+        @keyframes florecer {
+            0% { transform: scale(0); }
+        }
+        
+        @keyframes semillas-girasol {
+            0% { opacity: 0; transform: translateY(0vmin) rotate(0deg); }
+            20% { opacity: 1; transform: translateY(-3vmin) translateX(-1vmin) rotate(45deg); }
+            40% { opacity: 1; transform: translateY(-8vmin) translateX(1vmin) rotate(90deg); }
+            60% { transform: translateY(-12vmin) translateX(-1vmin) rotate(135deg); }
+            80% { transform: translateY(-16vmin) translateX(2vmin) rotate(180deg); opacity: 0.5; }
+            100% { transform: translateY(-25vmin) rotate(225deg); opacity: 0; }
+        }
+        
+        @keyframes crecer-tallo {
+            0% { height: 0; border-radius: 1vmin; }
+        }
+        
+        /* Título y controles */
+        .titulo {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            z-index: 10;
+            opacity: 0.9;
+        }
+        
+        .controles {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .boton {
+            padding: 10px 20px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .boton:hover {
+            background: rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Efecto de carga */
+        .cargando * {
+            animation-play-state: paused !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .titulo {
+                font-size: 1.8rem;
+                top: 10px;
+            }
+            
+            .controles {
+                flex-direction: column;
+                align-items: center;
+                bottom: 10px;
+            }
+            
+            .girasol {
+                transform: scale(0.7);
+            }
+        }
+    </style>
 </head>
-<body>
-  <div class="cont">
-    <!-- 🌟 Frase con efecto -->
-    <div class="frase">Nunca serás espectadora</div>
-
-    <!-- 🌻 Flores -->
-    <div class="flowers">
-      <div class="flower">
-        <div class="stem"></div>
-        <div class="petal" style="transform: rotate(0deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(45deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(90deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(135deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(180deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(225deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(270deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(315deg) translateX(-50%);"></div>
-        <div class="center"></div>
-      </div>
-      <div class="flower">
-        <div class="stem"></div>
-        <div class="petal" style="transform: rotate(0deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(45deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(90deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(135deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(180deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(225deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(270deg) translateX(-50%);"></div>
-        <div class="petal" style="transform: rotate(315deg) translateX(-50%);"></div>
-        <div class="center"></div>
-      </div>
+<body class="cargando">
+    <div class="contenedor">
+        <h1 class="titulo">Jardín de Girasoles Nocturno</h1>
+        
+        <div class="cierno-nocturno"></div>
+        
+        <div class="estrellas" id="estrellas"></div>
+        
+        <div class="estrellas-fugaces">
+            <div class="estrella-fugaz"></div>
+            <div class="estrella-fugaz"></div>
+            <div class="estrella-fugaz"></div>
+            <div class="estrella-fugaz"></div>
+            <div class="estrella-fugaz"></div>
+        </div>
+        
+        <div class="girasoles">
+            <!-- Los girasoles se generarán con JavaScript -->
+        </div>
+        
+        <div class="controles">
+            <button class="boton" id="pausar">Pausar/Reanudar</button>
+            <button class="boton" id="masEstrellas">Más Estrellas Fugaces</button>
+            <button class="boton" id="reiniciar">Reiniciar Escena</button>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // Genera estrellas fugaces
-    function createStar() {
-      const star = document.createElement("div");
-      star.classList.add("star");
-      star.style.top = Math.random() * window.innerHeight + "px";
-      star.style.left = Math.random() * window.innerWidth + "px";
-      star.style.animationDuration = 2 + Math.random() * 3 + "s";
-      document.body.appendChild(star);
-      setTimeout(() => star.remove(), 3000);
-    }
-
-    setInterval(createStar, 1000);
-  </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Crear estrellas de fondo
+            const estrellasContainer = document.getElementById('estrellas');
+            for (let i = 0; i < 200; i++) {
+                const estrella = document.createElement('div');
+                estrella.className = 'estrella';
+                estrella.style.left = `${Math.random() * 100}%`;
+                estrella.style.top = `${Math.random() * 100}%`;
+                estrella.style.width = `${Math.random() * 3 + 1}px`;
+                estrella.style.height = estrella.style.width;
+                estrella.style.animationDelay = `${Math.random() * 4}s`;
+                estrellasContainer.appendChild(estrella);
+            }
+            
+            // Crear girasoles
+            const girasolesContainer = document.querySelector('.girasoles');
+            const posicionesGirasoles = [
+                { left: '20%', rotacion: 2, altura: 70, delay: 0.3 },
+                { left: '50%', rotacion: 20, altura: 60, delay: 0.6 },
+                { left: '50%', rotacion: -15, altura: 55, delay: 0.9 },
+                { left: '-25%', rotacion: 10, altura: 90, delay: 1.2 },
+                { left: '75%', rotacion: -25, altura: 85, delay: 1.9 }
+            ];
+            
+            posicionesGirasoles.forEach((pos, index) => {
+                const girasol = crearGirasol(pos, index + 1);
+                girasolesContainer.appendChild(girasol);
+            });
+            
+            // Crear hierbas
+            for (let i = 0; i < 10; i++) {
+                const hierba = crearHierba(i);
+                girasolesContainer.appendChild(hierba);
+            }
+            
+            // Quitar clase de carga después de un tiempo
+            setTimeout(() => {
+                document.body.classList.remove('cargando');
+            }, 1000);
+            
+            // Controladores de botones
+            document.getElementById('pausar').addEventListener('click', () => {
+                document.body.classList.toggle('cargando');
+            });
+            
+            document.getElementById('masEstrellas').addEventListener('click', () => {
+                crearEstrellaFugaz();
+            });
+            
+            document.getElementById('reiniciar').addEventListener('click', () => {
+                document.body.classList.add('cargando');
+                setTimeout(() => {
+                    document.body.classList.remove('cargando');
+                }, 500);
+            });
+            
+            // Generar estrellas fugaces aleatorias
+            setInterval(() => {
+                if (Math.random() > 0.3 && !document.body.classList.contains('cargando')) {
+                    crearEstrellaFugaz();
+                }
+            }, 3000);
+            
+            // Funciones auxiliares
+            function crearGirasol(pos, id) {
+                const girasol = document.createElement('div');
+                girasol.className = `girasol girasol--${id}`;
+                girasol.style.left = pos.left;
+                girasol.style.transform = `rotate(${pos.rotacion}deg)`;
+                
+                // Petalos
+                const petalos = document.createElement('div');
+                petalos.className = `petalos petalos--${id}`;
+                petalos.style.animationDelay = `${id * 0.3 + 0.5}s`;
+                
+                for (let i = 0; i < 12; i++) {
+                    const petalo = document.createElement('div');
+                    petalo.className = 'petalo';
+                    petalo.style.transform = `translate(-50%, -10%) rotate(${i * 30}deg)`;
+                    petalos.appendChild(petalo);
+                }
+                
+                // Centro del girasol
+                const centro = document.createElement('div');
+                centro.className = 'centro-girasol';
+                
+                // Semillas
+                for (let i = 1; i <= 8; i++) {
+                    const semilla = document.createElement('div');
+                    semilla.className = `semilla semilla--${i}`;
+                    semilla.style.animationDelay = `${i * 0.5}s`;
+                    centro.appendChild(semilla);
+                }
+                
+                petalos.appendChild(centro);
+                girasol.appendChild(petalos);
+                
+                // Tallo
+                const tallo = document.createElement('div');
+                tallo.className = 'tallo';
+                tallo.style.animationDelay = `${pos.delay}s`;
+                tallo.style.height = `${pos.altura}vmin`;
+                
+                // Hojas del tallo
+                for (let i = 1; i <= 4; i++) {
+                    const hoja = document.createElement('div');
+                    hoja.className = `hoja-tallo hoja-tallo--${i}`;
+                    tallo.appendChild(hoja);
+                }
+                
+                girasol.appendChild(tallo);
+                
+                return girasol;
+            }
+            
+            function crearHierba(id) {
+                const hierba = document.createElement('div');
+                hierba.className = `hierba hierba--${id + 1}`;
+                
+                const parteSuperior = document.createElement('div');
+                parteSuperior.className = 'parte-superior-hierba';
+                
+                const parteInferior = document.createElement('div');
+                parteInferior.className = 'parte-inferior-hierba';
+                
+                hierba.appendChild(parteSuperior);
+                hierba.appendChild(parteInferior);
+                
+                return hierba;
+            }
+            
+            function crearEstrellaFugaz() {
+                const estrella = document.createElement('div');
+                estrella.className = 'estrella-fugaz';
+                estrella.style.top = `${Math.random() * 60 + 5}%`;
+                estrella.style.left = '-10%';
+                estrella.style.animationDuration = `${Math.random() * 1.5 + 2}s`;
+                
+                document.querySelector('.estrellas-fugaces').appendChild(estrella);
+                
+                setTimeout(() => {
+                    estrella.remove();
+                }, 3000);
+            }
+        });
+    </script>
 </body>
 </html>
